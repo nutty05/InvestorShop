@@ -1,2 +1,37 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+using System;
+using System.Linq;
+
+namespace StoreOptimization
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Enter the number of roads (N) and the maximum distance (K) : ");
+            var input = Console.ReadLine().Split(' ').Select(int.Parse).ToArray();
+            int numRoads = input[0];
+            int maxDistance = input[1];
+
+            Console.WriteLine("Enter the population of each road :");
+            int[] roadPopulations = Console.ReadLine().Split(' ').Select(int.Parse).ToArray();
+
+            int maxPopulation = GetMaxPopulation(numRoads, maxDistance, roadPopulations);
+            Console.WriteLine("Maximum possible total population: " + maxPopulation);
+        }
+
+        static int GetMaxPopulation(int numRoads, int maxDistance, int[] roadPopulations)
+        {
+            int maxPopulation = 0;
+            for (int i = 0; i < numRoads; i++)
+            {
+                int currentPopulation = 0;
+                for (int j = Math.Max(0, i - maxDistance); j <= Math.Min(numRoads - 1, i + maxDistance); j++)
+                {
+                    currentPopulation += roadPopulations[j];
+                }
+                maxPopulation = Math.Max(maxPopulation, currentPopulation);
+            }
+            return maxPopulation;
+        }
+    }
+}
